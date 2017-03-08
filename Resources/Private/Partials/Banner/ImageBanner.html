@@ -3,7 +3,7 @@
         <f:if condition="{banner.link}">
             <f:then>
                 <f:link.action action="click" arguments="{banner: banner}" target="{banner.linkTarget}" pageType="{settings.clickPageTypeNum}">
-                    <f:image src="uploads/tx_sfbanners/{banner.image}" title="{banner.alttext}" alt="{banner.alttext}"/>
+                    <f:image src="uploads/tx_sfbanners/{banner.image}" title="{banner.alttext}" maxWidth="1170" alt="{banner.alttext}" class="img-responsive"/>
                 </f:link.action>
             </f:then>
             <f:else>
