@@ -101,3 +101,11 @@ clickPage {
 }
 
 page.includeJSFooter.bannerJQuery >
+
+lib.banner < plugin.tx_sfbanners.widgets.bannerWidget
+lib.banner {
+    settings {
+        startingPoint = 76
+        displayMode = random
+    }
+}
