@@ -99,3 +99,5 @@ clickPage {
         vendorName = DERHANSEN
     }
 }
+
+page.includeJSFooter.bannerJQuery >
