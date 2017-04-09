@@ -14,9 +14,9 @@ namespace DERHANSEN\SfBanners\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Banner Controller
@@ -62,6 +62,7 @@ class BannerController extends ActionController
      */
     public function __construct()
     {
+        parent::__construct();
         $this->initializeCache();
     }
 
@@ -101,15 +102,35 @@ class BannerController extends ActionController
             $this->settings['displayMode'];
         $hmac = $this->hashService->generateHmac($stringToHash);
 
-        $this->view->assign('pid', $GLOBALS['TSFE']->id);
-        $this->view->assign('lang', $GLOBALS['TSFE']->sys_language_uid);
-        $this->view->assign('categories', $this->settings['category']);
-        $this->view->assign('startingPoint', $this->settings['startingPoint']);
-        $this->view->assign('displayMode', $this->settings['displayMode']);
-        $this->view->assign('typeNum', $this->settings['ajaxPageTypeNum']);
+        $arguments = [
+            'L' => $GLOBALS['TSFE']->sys_language_uid,
+            'type' => $this->settings['ajaxPageTypeNum'],
+            'tx_sfbanners_pi1[action]' => 'getBanners',
+            'tx_sfbanners_pi1[controller]' => 'Banner',
+            'tx_sfbanners_pi1[currentPageUid]' => $GLOBALS['TSFE']->id,
+            'tx_sfbanners_pi1[hmac]' => $hmac,
+        ];
+
+        if ($this->settings['startingPoint'] !== '') {
+            $arguments['tx_sfbanners_pi1[startingPoint]'] = $this->settings['startingPoint'];
+        }
+        if ($this->settings['category'] !== '') {
+            $arguments['tx_sfbanners_pi1[categories]'] = $this->settings['category'];
+        }
+        if ($this->settings['displayMode'] !== '') {
+            $arguments['tx_sfbanners_pi1[displayMode]'] = $this->settings['displayMode'];
+        }
+
+        $url = $this->controllerContext
+            ->getUriBuilder()
+            ->reset()
+            ->setUseCacheHash(true)
+            ->setTargetPageUid($GLOBALS['TSFE']->id)
+            ->setArguments($arguments)
+            ->buildFrontendUri();
+
+        $this->view->assign('url', $url);
         $this->view->assign('uniqueid', $uniqueid);
-        $this->view->assign('absRefPrefix', $GLOBALS['TSFE']->absRefPrefix);
-        $this->view->assign('hmac', $hmac);
 
         /* Find all banners and add additional CSS */
         $banners = $this->bannerRepository->findAll();
@@ -166,12 +187,11 @@ class BannerController extends ActionController
                 $ret = $this->view->render();
 
                 // Save value in cache
-                $this->cacheInstance->set(sha1($ident), $ret, array('sf_banners'), $this->settings['cacheLifetime']);
+                $this->cacheInstance->set(sha1($ident), $ret, ['sf_banners'], $this->settings['cacheLifetime']);
             }
         } else {
             $ret = LocalizationUtility::translate('wrong_hmac', 'SfBanners');
         }
         return $ret;
     }
-
 }

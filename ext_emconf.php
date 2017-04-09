@@ -10,9 +10,9 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Banner-Management',
-    'description' => 'Banner-Management Extension based on Extbase and Fluid. Loads banners asynchronously by JQuery.',
+    'description' => 'Banner-Management Extension based on Extbase and Fluid. Loads banners asynchronously using jQuery.',
     'category' => 'plugin',
     'author' => 'Torben Hansen',
     'author_email' => 'derhansen@gmail.com',
@@ -26,14 +26,13 @@ $EM_CONF[$_EXTKEY] = array(
     'modify_tables' => '',
     'clearCacheOnLoad' => 0,
     'lockType' => '',
-    'version' => '1.0.1',
-    'constraints' => array(
-        'depends' => array(
-            'extbase' => '6.2',
-            'fluid' => '6.2',
-            'typo3' => '6.2.0-7.99.99',
-        ),
-        'conflicts' => array(),
-        'suggests' => array(),
-    ),
-);
+    'version' => '2.0.1',
+    'constraints' => [
+        'depends' => [
+            'typo3' => '7.6.0-8.7.99',
+            'php' => '5.4.0-7.1.99',
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+];
