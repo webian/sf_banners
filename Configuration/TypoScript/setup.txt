@@ -70,6 +70,8 @@ ajaxPage {
         admPanel = 0
     }
 
+    # !ian: Remove dependency from tt_contents Typoscript
+#    10 < tt_content.list.20.sfbanners_pi1
     10 = USER
     10 {
         userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
@@ -99,8 +101,10 @@ clickPage {
     }
 }
 
+# !ian: force disable jQuery
 page.includeJSFooter.bannerJQuery >
 
+# !ian: add lib.banner
 lib.banner < plugin.tx_sfbanners.widgets.bannerWidget
 lib.banner {
     settings {
